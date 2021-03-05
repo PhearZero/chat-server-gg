@@ -1,0 +1,7 @@
+{
+  "name": "uWebSocket Chat Server Instance",
+  "description": "Example Chat Server",
+  "repository": "https://github.com/PhearZero/chat-server-gg",
+  "logo": "https://node-js-sample.herokuapp.com/node.png",
+  "keywords": ["node", "websocket", "chat"]
+}
