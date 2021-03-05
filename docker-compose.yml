@@ -1,0 +1,67 @@
+version: "3.3"
+services:
+
+  # Broker requests to WebSocket Servers via NGINX in Load Balancing/High Availability configuration
+  requests:
+    image: "jwilder/nginx-proxy"
+    volumes:
+      - "/var/run/docker.sock:/tmp/docker.sock:ro"
+    ports:
+      - "80:80"
+    command: >
+      bash -c "
+      sed -i -e 's/^\(upstream .*\)/{{ $$ip_hash := or (first (groupByKeys $$containers \"Env.USE_IP_HASH\")) \"0\" }}\n\n\1 \n{{ if ne $$ip_hash \"0\" }} \n     ip_hash;\n{{ end }}/g' nginx.tmpl ;
+      forego start -r
+      "
+
+  # One bad ass Pub/SUB + uWebSocket.js bindings
+  app:
+    build:
+      context: .
+      dockerfile: "Dockerfile"
+    image: "registry/chat-server-gg"
+    expose:
+      - 9001
+    depends_on:
+      - "redis"
+      - "worker"
+    environment:
+      - USE_IP_HASH=1
+      - VIRTUAL_HOST=access.local
+      - NODE_INDEX={{.Task.Slot}}
+
+    deploy:
+      mode: "replicated"
+      replicas: 2
+      resources:
+        limits:
+          cpus: "0.75"
+
+  # Take messages as they come and store them in the database
+  worker:
+    image: "registry/chat-server-gg"
+    depends_on:
+      - "redis"
+      - "database"
+    environment:
+      WORKER: "true"
+      NODE_INDEX: "{{.Task.Slot}}"
+    deploy:
+      resources:
+        limits:
+          cpus: "0.1"
+
+  database:
+    image: "couchdb"
+    #Optionally Expose ports to public for /_utils
+    ports:
+      - "5984:5984"
+    environment:
+      COUCHDB_USER: "admin"
+      COUCHDB_PASSWORD: "admin"
+
+  #TODO: Setup redis-cluster with redis-cli
+  redis:
+    image: "redis"
+    ports:
+      - "6379:6379"
