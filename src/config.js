@@ -1,9 +1,9 @@
 // Port for WebSocket Server
-const PORT = process.env.PORT || 9001;
+const PORT = parseInt(process.env.PORT) || 9001;
 // Hostname for Redis
 const REDIS_HOSTNAME = process.env.REDIS_HOSTNAME || 'redis';
 // Port for Redis
-const REDIS_PORT = process.env.REDIS_PORT || '6379';
+const REDIS_PORT = parseInt(process.env.REDIS_PORT) || 6379;
 // Channel name to Subscribe to
 const REDIS_CHANNEL = process.env.REDIS_CHANNEL || 'MESSAGES';
 // Full Redis URL
