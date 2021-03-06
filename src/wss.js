@@ -14,15 +14,14 @@ const queue = createQueue({});
 const handleSub = (channel, msg, socket) =>{
     // Log message
     console.log(`RECEIVED from ${channel}`)
-    // If a socket exists, send the message
-    if(socket) socket.send(`${channel}: ${msg}, NODE: ${NODE_INDEX}`)
-    // Fail, we always need a socket
-    else fail(new Error('No Socket Instance!'))
+
+    socket.send(`${channel}: ${msg}, NODE: ${NODE_INDEX}`)
 }
 
 // So fast yaz
 module.exports = App => App.ws('/*', {
-    idleTimeout: 30,
+    // Kick everyone after 5 minutes
+    idleTimeout: 300,
     maxBackpressure: 1024,
     maxPayloadLength: 512,
     // Setup Redis Subscription Listener on Open
@@ -38,6 +37,7 @@ module.exports = App => App.ws('/*', {
     },
     // Publish messages to Redis + Queue
     message: (ws, message, isBinary) => {
+        console.log('Received message');
         // TODO: Compress/ProtoBuff
         let sBuffer = Buffer.from(message)
         // Add the message to the storage queue

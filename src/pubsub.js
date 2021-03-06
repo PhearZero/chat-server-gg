@@ -1,9 +1,9 @@
-const {REDIS_URL, REDIS_CHANNEL, NODE_INDEX} = require('./config');
-const redis = require('redis');
+const {REDIS_URL, REDIS_CHANNEL} = require('./config');
+const IORedis = require('ioredis');
 
 // Create Pub/Sub Clients
-const sub = redis.createClient(REDIS_URL);
-const pub = redis.createClient(REDIS_URL);
+const sub = new IORedis(REDIS_URL);
+const pub = new IORedis(REDIS_URL);
 
 // Generic failure with process exit
 const fail = (err)=>{

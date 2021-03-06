@@ -7,11 +7,10 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "dependencies": {
-    "bull": "^3.20.1",
     "bullmq": "^1.14.7",
+    "ioredis": "^4.23.0",
     "os": "^0.1.1",
     "pouchdb": "^7.2.2",
-    "redis": "^3.0.2",
     "uWebSockets.js": "github:uNetworking/uWebSockets.js#v18.14.0"
   },
   "keywords": [],

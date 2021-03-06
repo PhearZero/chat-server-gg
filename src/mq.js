@@ -1,11 +1,8 @@
 const {Queue, Worker} = require('bullmq');
-const {REDIS_HOSTNAME, REDIS_PORT, NODE_INDEX} = require('./config');
-const {fail} = require('./utils');
+const IORedis = require('ioredis');
+const {REDIS_URL} = require('./config');
 
-const connection = {
-    host: REDIS_HOSTNAME,
-    port: REDIS_PORT
-}
+const connection = new IORedis(REDIS_URL);
 let queue;
 /**
  * Create a Bullmq Storage Queue
