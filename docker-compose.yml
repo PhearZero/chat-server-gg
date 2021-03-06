@@ -20,8 +20,6 @@ services:
       context: .
       dockerfile: "Dockerfile"
     image: "registry/chat-server-gg"
-    expose:
-      - 9001
     depends_on:
       - "redis"
       - "worker"
@@ -29,14 +27,9 @@ services:
       - USE_IP_HASH=1
       - VIRTUAL_HOST=access.local
       - NODE_INDEX={{.Task.Slot}}
-
     deploy:
       mode: "replicated"
       replicas: 2
-      resources:
-        limits:
-          cpus: "0.75"
-
   # Take messages as they come and store them in the database
   worker:
     image: "registry/chat-server-gg"
@@ -46,10 +39,6 @@ services:
     environment:
       WORKER: "true"
       NODE_INDEX: "{{.Task.Slot}}"
-    deploy:
-      resources:
-        limits:
-          cpus: "0.1"
 
   database:
     image: "couchdb"
