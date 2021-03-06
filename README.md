@@ -1,5 +1,5 @@
 # chat-server-gg
-[![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy?template=https://github.com/PhearZerp/chat-server-gg)
+[![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy?template=https://github.com/PhearZero/chat-server-gg)
 
 This project aims to demonstrate the basics of scaleable **WebSocket** (and|or) **REST** servers.
 
